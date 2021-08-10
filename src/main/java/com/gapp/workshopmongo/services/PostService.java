@@ -1,5 +1,6 @@
 package com.gapp.workshopmongo.services;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,9 @@ public class PostService {
 	
 	public List<Post> findByTitle(String text){
 		return postRepository.findByTitle(text);
+	}
+	
+	public List<Post> find(String text, Instant minDate, Instant maxDate){
+		return postRepository.find(text, minDate, maxDate);
 	}
 }

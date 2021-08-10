@@ -1,6 +1,7 @@
 package com.gapp.workshopmongo.resources;
 
 import java.util.List;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,19 @@ public class PostResource {
 	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue = "") String text) {
 		text = URL.decodeParam(text);
 		List<Post> list = postService.findByTitle(text);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/fullsearch")
+	public ResponseEntity<List<Post>> find(
+			@RequestParam(value="text", defaultValue = "") String text,
+			@RequestParam(value="minDate", defaultValue = "") String minDate,
+			@RequestParam(value="maxDate", defaultValue = "") String maxDate) {		
+		text = URL.decodeParam(text);
+		Instant minDefault = Instant.parse("2010-01-01T00:01:00Z");
+		Instant min = URL.convertDate(minDate, minDefault);
+		Instant max = URL.convertDate(maxDate, Instant.now());
+		List<Post> list = postService.find(text, min, max);
 		return ResponseEntity.ok().body(list);
 	}
 }
